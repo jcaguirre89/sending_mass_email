@@ -23,10 +23,11 @@ ATTACHMENT_NAME = 'attachment.pdf'
 SUBJECT = 'My Subject'
 DISTRIBUTION_LIST = 'distribution_list.csv'
 FROM_NAME = 'Cristobal Aguirre'
+EMAIL_TITLE = 'My Email'
 
 
 def main():
-    """ parse distribution list and send email to everyone """
+    """ parse distribution list and send email """
     mailing_list = parse_distribution_list()
     for entry in mailing_list:
         print(f'Sending email to {entry.email}')
@@ -64,11 +65,8 @@ def send_email(to):
 
     msgRoot = MIMEMultipart('related')
     email_account = EMAIL_USER
-    # Send from accounts@deetken.com alias
     msgRoot['From'] = formataddr((str(Header(FROM_NAME, 'utf-8')), EMAIL_USER))
     msgRoot['To'] = to.email
-    # For testing
-    # msgRoot['To'] = 'compliance@deetken.com'
     msgRoot['Subject'] = SUBJECT
     msgRoot.preamble = ''
 
@@ -121,7 +119,7 @@ def email_body(to):
       <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>Deetken Impact Quarterly Statements</title>
+        <title>""" + EMAIL_TITLE + """</title>
             <style type="text/css">
                 body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}
                 .ExternalClass {width:100%;}
