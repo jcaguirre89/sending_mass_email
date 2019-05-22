@@ -19,9 +19,10 @@ EMAIL_USER = config('EMAIL_USER')
 EMAIL_PASSWORD = config('EMAIL_PASSWORD')
 BASE_PATH = pathlib.Path.cwd()
 
-ATTACHMENT_NAME = 'Deetken Impact Fund Quarterly Report 31 Mar 2019.pdf'
-SUBJECT = 'Deetken Impact 2019 Q1 Report on Financial and Impact Performance'
+ATTACHMENT_NAME = 'attachment.pdf'
+SUBJECT = 'My Subject'
 DISTRIBUTION_LIST = 'distribution_list.csv'
+FROM_NAME = 'Cristobal Aguirre'
 
 
 def main():
@@ -64,12 +65,12 @@ def send_email(to):
     msgRoot = MIMEMultipart('related')
     email_account = EMAIL_USER
     # Send from accounts@deetken.com alias
-    msgRoot['From'] = formataddr((str(Header('Alexa Blain', 'utf-8')), 'ablain@deetken.com'))
+    msgRoot['From'] = formataddr((str(Header(FROM_NAME, 'utf-8')), EMAIL_USER))
     msgRoot['To'] = to.email
     # For testing
     # msgRoot['To'] = 'compliance@deetken.com'
     msgRoot['Subject'] = SUBJECT
-    msgRoot.preamble = 'Deetken Impact Quarterly Report'
+    msgRoot.preamble = ''
 
     # Encapsulate the plain and HTML versions of the message body in an
     # 'alternative' part, so message agents can decide which they want to display.
@@ -79,17 +80,14 @@ def send_email(to):
     alternative_text = f"""
         Dear {to.first_name},
         
-        We are pleased to share our latest report on the financial, social and environmental performance of the Deetken Impact Fund.
-        
-        We would love to see you at our Wednesday, June 5 #LatinasDeliver side event at the Women Deliver conference in Vancouver, which we are hosting together with Pro Mujer and MEDA. It will be a wonderful opportunity to connect with others from around the world interested in gender lens investing and advancing gender equality globally. You can register here.
-        
-        For more news and updates from the Deetken Impact team, follow us on Twitter.   
-        
-        As always, thank you for investing with us. 
-        
-        Best regards,
-        
-        Alexa
+        This is some text\n
+        And some more text\n
+        \n
+        Here's some more text\n
+        \n
+        Best regards,\n
+        \n
+        Cristobal
     """
 
     msgText = MIMEText(alternative_text, 'plain')
@@ -101,14 +99,6 @@ def send_email(to):
     body = MIMEText(html, 'html')
 
     msgAlternative.attach(body)
-
-    logoDir = BASE_PATH / 'logo_email.png'
-    with open(logoDir, 'rb') as fp:
-        msgImage = MIMEImage(fp.read())
-
-    # Define the image's ID as referenced in the HTML body
-    msgImage.add_header('Content-ID', '<logo>')
-    msgRoot.attach(msgImage)
 
     # attach pdf
     add_attachment(ATTACHMENT_NAME, msgRoot)
@@ -141,80 +131,26 @@ def email_body(to):
                 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: blue !important;}
                 table td {border-collapse: collapse;}
                 table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
-        .signature td {
-            font-size: 12px;
-            border-left: solid 2px black;
-    padding-left: 5px;
-            }
-        .signature {
-            width: 60%;
-            }
 
             </style>
         </head>
         <body>
                 <p>Dear """ + to.first_name + """,</p>
                 <p>
-                    We are pleased to share our latest report on the financial, social and environmental performance
-                    of the Deetken Impact Fund.
+                    This is some text
                 </p>
                 
                 <p>
-                    We would love to see you at our Wednesday, June 5 #LatinasDeliver side event at the Women
-                    Deliver conference in Vancouver, which we are hosting together with Pro Mujer and MEDA.
-                    It will be a wonderful opportunity to connect with others from around the world
-                    interested in gender lens investing and advancing gender equality globally.
-                    You can register
-                    <a href="https://www.eventbrite.com/e/latinasdeliver-networking-cocktail-tickets-61037484760">here</a>.
+                    And some more text
                 </p>
                 
                 <p>
-                    For more news and updates from the Deetken Impact team, follow us on
-                    <a href="https://twitter.com/DeetkenImpact">Twitter</a>.
+                    Here's even more text
                 </p>
                 
-                <p>As always, thank you for investing with us.</p>
                 <p>Best regards,</p>
-                <p>Alexa</p>
+                <p>Cristobal</p>
                 
-
-                    <table class="signature">
-                    <tr>
-                        <td style="width: 50%; text-align:center; border-left: 0;" rowspan= "4"><img src="cid:logo" style="width: 150px; height: 75px;outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;"></td>
-                                <td style="width: 50%;">Suite 501 - 1755 W. Broadway</td>
-                    </tr>
-                    <tr>
-
-                                <td style="width: 50%;">Vancouver, BC V6J 4S2</td>
-                    </tr>
-                    <tr>
-
-                                <td style="width: 50%;">ablain@deetken.com</td>
-                    </tr>
-                    <tr>
-
-                                <td style="width: 50%;">Office: +1 (604) 731-4424</td>
-                    <tr>
-                        <td style="width: 50%; text-align:center; border-left: 0;" rowspan= "3"><strong>Make an Impact with your investment.</strong></td>                           
-                                <td style="width: 50%;">Fax: +1 (604) 736-2246</td>
-                    </tr>
-                    <tr>
-
-                                <td style="width: 50%;">Web: <a href="www.deetkenimpact.com">www.deetkenimpact.com</a></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 50%; text-align:center; border-left: 0;" rowspan= "3"></td>
-                        <td style="width: 50%;"> </td>
-                    </tr>
-                </table>
-                <p style="font-size: 12px;">The information in this email is confidential and may be
-                legally privileged. Access to this email by anyone other than the intended
-                addressee is unauthorized. If you are not the intended recipient of this
-                message, any review, disclosure, copying, distribution, retention, or any
-                action taken or omitted to be taken in reliance on it is prohibited and may
-                be unlawful. If you are not the intended recipient, please reply to or forward
-                a copy of this message to the sender and delete the message, any attachments,
-                and any copies thereof from your system.</p>
         </body>
     </html>"""
     return body
