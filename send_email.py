@@ -75,6 +75,7 @@ def send_email(to):
     msgAlternative = MIMEMultipart('alternative')
     msgRoot.attach(msgAlternative)
 
+    # Basic text version
     alternative_text = f"""
         Dear {to.first_name},
         
@@ -88,15 +89,15 @@ def send_email(to):
         Cristobal
     """
 
-    msgText = MIMEText(alternative_text, 'plain')
-    msgAlternative.attach(msgText)
-
+    # Nice HTML version
     html = email_body(to)
 
-    # Record the MIME types of both parts - text/plain and text/html.
-    body = MIMEText(html, 'html')
+    # Attach both to the message
+    basic_body = MIMEText(alternative_text, 'plain')
+    msgAlternative.attach(basic_body)
 
-    msgAlternative.attach(body)
+    html_body = MIMEText(html, 'html')
+    msgAlternative.attach(html_body)
 
     # attach pdf
     add_attachment(ATTACHMENT_NAME, msgRoot)
